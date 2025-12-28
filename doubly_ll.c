@@ -100,6 +100,74 @@ void display() {
     printf("NULL\n");
 }
 
+void deleteFront() {
+    if (head == NULL) {
+        printf("List is empty. Nothing to delete.\n");
+        return;
+    }
+    Node* temp = head;
+    if (head->next == NULL) { // only one node
+        printf("Deleted: %d\n", temp->data);
+        free(temp);
+        head = NULL;
+        return;
+    }
+    head = head->next;
+    head->prev = NULL;
+    printf("Deleted: %d\n", temp->data);
+    free(temp);
+}
+
+void deleteEnd() {
+    if (head == NULL) {
+        printf("List is empty. Nothing to delete.\n");
+        return;
+    }
+    Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    if (temp->prev == NULL) { // only one node
+        printf("Deleted: %d\n", temp->data);
+        free(temp);
+        head = NULL;
+        return;
+    }
+    temp->prev->next = NULL;
+    printf("Deleted: %d\n", temp->data);
+    free(temp);
+}
+
+void deleteSpecificPos(int pos) {
+    if (head == NULL) {
+        printf("List is empty. Nothing to delete.\n");
+        return;
+    }
+    if (pos <= 1) {
+        deleteFront();
+        return;
+    }
+    Node* temp = head;
+    int i = 1;
+    while (i < pos && temp != NULL) {
+        temp = temp->next;
+        i++;
+    }
+    if (temp == NULL) {
+        printf("Invalid position. Position %d is out of bounds.\n", pos);
+        return;
+    }
+    if (temp->next == NULL) { // last node
+        deleteEnd();
+        return;
+    }
+    // middle node
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
+    printf("Deleted: %d\n", temp->data);
+    free(temp);
+}
+
 int main() {
     int choice, data, pos;
     while (1) {
@@ -108,9 +176,15 @@ int main() {
         printf("2. Insert at End\n");
         printf("3. Insert at Specific Position\n");
         printf("4. Display List\n");
-        printf("5. Exit\n");
+        printf("5. Delete at Front\n");
+        printf("6. Delete at End\n");
+        printf("7. Delete at Specific Position\n");
+        printf("8. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Exiting.\n");
+            break;
+        }
 
         switch (choice) {
             case 1:
@@ -134,6 +208,17 @@ int main() {
                 display();
                 break;
             case 5:
+                deleteFront();
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf("Enter position (1-based) to delete: ");
+                scanf("%d", &pos);
+                deleteSpecificPos(pos);
+                break;
+            case 8:
                 printf("Exiting...\n");
                 exit(0);
             default:
