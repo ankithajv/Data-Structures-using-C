@@ -9,21 +9,21 @@ typedef struct Node {
 
 Node* makeTree() {
     Node *newNode;
-    int info;
+    int data;
     printf("Enter the info or -1 for null\n");
-    scanf("%d", &info);
+    scanf("%d", &data);
 
-    if (info == -1) {
+    if (data == -1) {
         return NULL;
     }
 
     newNode = (Node *)malloc(sizeof(Node));
-    newNode->data = info;
+    newNode->data = data;
 
-    printf("Enter the left child of %d\n", info);
+    printf("Enter the left child of %d\n", data);
     newNode->left = makeTree();
     
-    printf("Enter the right child of %d\n", info);
+    printf("Enter the right child of %d\n", data);
     newNode->right = makeTree();
 
     return newNode;
